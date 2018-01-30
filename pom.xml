@@ -40,11 +40,6 @@
 				<version>3.1.0</version>
 				<scope>provided</scope>
 			</dependency>
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-core</artifactId>
-				<version>4.0.0.Beta5</version>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -55,6 +50,11 @@
 			<!-- use the following artifactId if you don't need servlet 2.x compatibility -->
 			<!-- artifactId>jersey-container-servlet</artifactId -->
 		</dependency>
+		<dependency>
+     <groupId>org.hibernate</groupId>
+     <artifactId>hibernate-core</artifactId>
+     <version>3.3.2.GA</version>
+</dependency>
 		<!-- uncomment this to get JSON support <dependency> <groupId>org.glassfish.jersey.media</groupId> 
 			<artifactId>jersey-media-moxy</artifactId> </dependency> -->
 	</dependencies>

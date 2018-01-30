@@ -263,7 +263,7 @@ public class Calibration {
 		keepClimbing();
 	}
 
-	public static void main(String[] args) {
+	public static void START(){
 		SimulateDataBase.setAllStudentsData();
 		while (climb < 100) {
 			findLocalMaximum();

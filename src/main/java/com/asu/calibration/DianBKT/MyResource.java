@@ -20,10 +20,7 @@ public class MyResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String getIt() {
-        
-    	
+    	Calibration.START();
     	return "Got it!";
-        
-        
     }
 }
