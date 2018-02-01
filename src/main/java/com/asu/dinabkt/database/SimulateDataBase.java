@@ -24,9 +24,9 @@ public class SimulateDataBase {
 	static SessionFactory sf_OPE_Class_25;
 	static Session session25;
 	public static void setAllStudentsData() {
-		GlobalConstants.total_KCs = 30;
-		GlobalConstants.total_Questions = 50;
-		GlobalConstants.total_Students = 100;
+		GlobalConstants.total_KCs = 3;
+		GlobalConstants.total_Questions = 5;
+		GlobalConstants.total_Students = 10;
 		GlobalConstants.total_Formats = 6;
 		GlobalConstants.total_Threshold = 25;
 		GlobalConstants.total_attempts_per_student = (2*GlobalConstants.total_Questions);
@@ -40,6 +40,7 @@ public class SimulateDataBase {
 		setStudentList();
 		setQMatrix();
 		setSQMap();
+		setFormatMap();
 		fillRandomParameters();
 		setCompetence();
 		initialize4ParamsCount();
@@ -50,6 +51,12 @@ public class SimulateDataBase {
 		
 	}
 	
+	private static void setFormatMap() {
+		for (int F = 0; F < GlobalConstants.total_Formats; F++) {
+			Utils.setFormatMap(F);
+		}
+	}
+
 	//initializations of Data Structures
 private static void initializeLastS() {
 		
@@ -123,7 +130,7 @@ private static void initializeLastS() {
 		Random r = new Random();
 		for (int q = 0; q < GlobalConstants.total_Questions; q++) {
 			Utils.setQuestion(q, q);
-			Utils.setQuestionMap(q);
+			//Utils.setQuestionMap(q);
 			Utils.setClassIdQuestion(q, q);
 			int n_KCs = r.nextInt((GlobalConstants.total_KCs - 1) + 1) + 1;
 			for (int j = 0; j < n_KCs; j++) {
@@ -210,9 +217,6 @@ private static void initializeLastS() {
 		Random r = new Random();
 		sf_OPE_Class_25 = SessionFactoryUtil.getSessionFactory();
 		session25 = sf_OPE_Class_25.openSession();
-		
-		sendMessageToSeatrTable(2,2,2,2,"timestamp");
-		
 		
 		for(int A=0;A<GlobalConstants.total_attempts_per_student;A++){
 			for (int St = 0; St < GlobalConstants.total_Students; St++) {
