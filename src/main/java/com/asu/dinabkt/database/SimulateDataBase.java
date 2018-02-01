@@ -1,5 +1,7 @@
 package com.asu.dinabkt.database;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Random;
@@ -11,6 +13,7 @@ import org.hibernate.Transaction;
 
 import com.asu.calibration.DianBKT.models.seatr_message;
 import com.asu.dinabkt.utils.GlobalConstants;
+import com.asu.dinabkt.utils.Operations;
 import com.asu.dinabkt.utils.Utils;
 
 public class SimulateDataBase {
@@ -28,6 +31,11 @@ public class SimulateDataBase {
 		GlobalConstants.total_Threshold = 25;
 		GlobalConstants.total_attempts_per_student = (2*GlobalConstants.total_Questions);
 	
+		fillrandom_initalMastery = new Double[GlobalConstants.total_KCs + 1];
+		fillrandom_Learn = new Double[GlobalConstants.total_KCs + 1];
+		fillrandom_slip = new Double[GlobalConstants.total_Formats + 1];
+		fillrandom_guess = new Double[GlobalConstants.total_Formats + 1];
+		
 		setKcMap();
 		setStudentList();
 		setQMatrix();
@@ -206,7 +214,7 @@ private static void initializeLastS() {
 		sendMessageToSeatrTable(2,2,2,2,"timestamp");
 		
 		
-		/*for(int A=0;A<GlobalConstants.total_attempts_per_student;A++){
+		for(int A=0;A<GlobalConstants.total_attempts_per_student;A++){
 			for (int St = 0; St < GlobalConstants.total_Students; St++) {
 				int S = Utils.getStudent(St);
 				int Q = 0 + r.nextInt() * (GlobalConstants.total_Questions - 0); 
@@ -234,7 +242,7 @@ private static void initializeLastS() {
 				String timeStamp = new Timestamp(System.currentTimeMillis()).toString();
 				sendMessageToSeatrTable(S,Q,F,Answer,timeStamp);
 			}
-		}*/
+		}
 		session25.disconnect();
 		session25.close();
 	}
