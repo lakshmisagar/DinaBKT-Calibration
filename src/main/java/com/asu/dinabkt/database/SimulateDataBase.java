@@ -40,7 +40,7 @@ public class SimulateDataBase {
 		setStudentList();
 		setQMatrix();
 		setSQMap();
-		//fillRandomParameters();
+		fillRandomParameters();
 		setCompetence();
 		initialize4ParamsCount();
 		initialize4ParamsOpportunities();
