@@ -34,9 +34,65 @@ public class SimulateDataBase {
 		setSQMap();
 		//fillRandomParameters();
 		//setCompetence();
+		initialize4ParamsCount();
+		initialize4ParamsOpportunities();
+		initialize4ParamsEstimate();
+		initializeLastS();
 		generateMessagesToSeatr();
 		
 	}
+	
+	//initializations of Data Structures
+private static void initializeLastS() {
+		
+		for(int S = 0; S < GlobalConstants.total_Students; S++){
+			int st = Utils.getStudent(S);
+			Utils.setLast(st, 0);
+		}
+	}
+
+	private static void initialize4ParamsEstimate() {
+
+		for (int F = 0; F < GlobalConstants.total_Formats; F++) {
+			
+			Utils.setSlipEstimateMap(F, 0.0);
+			Utils.setGuessEstimateMap(F, 0.0);
+		}
+		for (int K = 0; K < GlobalConstants.total_KCs; K++) {
+			int kc = Utils.getKc(K);
+			Utils.setLearnEstimateMap(kc, 0.0);
+			Utils.setInitialMasteryEstimateMap(kc, 0.0);
+		}
+		
+	}
+
+	private static void initialize4ParamsOpportunities() {
+
+		for (int F = 0; F < GlobalConstants.total_Formats; F++) {
+			
+			Utils.setSlipOpportunitiesMap(F, 0.0);
+			Utils.setGuessOpportunitiesMap(F, 0.0);
+		}
+		for (int K = 0; K < GlobalConstants.total_KCs; K++) {
+			int kc = Utils.getKc(K);
+			Utils.setLearnOpportunitiesMap(kc, 0.0);
+			Utils.setInitialMasteryOpportunitiesMap(kc, 0.0);
+		}
+	}
+
+	private static void initialize4ParamsCount() {
+		for (int F = 0; F < GlobalConstants.total_Formats; F++) {
+			
+			Utils.setSlipCountMap(F, 0.0);
+			Utils.setGuessCountMap(F, 0.0);
+		}
+		for (int K = 0; K < GlobalConstants.total_KCs; K++) {
+			int kc = Utils.getKc(K);
+			Utils.setLearnCountMap(kc, 0.0);
+			Utils.setInitialMasteryCountMap(kc, 0.0);
+		}
+	}
+	
 	//KC
 	private static void setKcMap() {
 		for (int i = 0; i < GlobalConstants.total_KCs; i++) {
