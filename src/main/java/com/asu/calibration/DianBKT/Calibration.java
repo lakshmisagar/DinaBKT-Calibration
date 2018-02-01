@@ -33,14 +33,20 @@ public class Calibration {
 	private static Double climbOneStep() {
 		intialization();
 		
-		/*SessionFactory sf_OPE_Class_25 = SessionFactoryUtil.getSessionFactory(GlobalConstants.OPE_Class_25);
+    	SessionFactory sf_OPE_Class_25 = SessionFactoryUtil.getSessionFactory();
 		Session session25 = sf_OPE_Class_25.openSession();
 		
 		String seatrMsg_hql = "FROM seatr_message";
 		Query seatrMSGquery = session25.createQuery(seatrMsg_hql);
 		List<seatr_message> qResult = seatrMSGquery.list();
-		System.out.println(qResult.size()+"  "+qResult);*/
-		//processResponseFromOPE();
+		for(seatr_message m:qResult){
+			System.out.println("Student_id:"+m.getStudent_id()+"  Quetion_id:"+m.getQuestion_id()+"  format_id:"+m.getFormat_id()+" correct:"+m.getCorrect()+" timestamp:"+m.getTimestamp());
+			processResponseFromOPE(m.getStudent_id(),m.getQuestion_id(),m.getFormat_id(),m.getCorrect(),m.getTimestamp());
+		}
+    	
+		session25.disconnect();
+		session25.close();
+		
 		GaugeProcess();
 		return null;
 	}
