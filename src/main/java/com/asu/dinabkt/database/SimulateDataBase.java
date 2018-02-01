@@ -217,8 +217,8 @@ private static void initializeLastS() {
 		for(int A=0;A<GlobalConstants.total_attempts_per_student;A++){
 			for (int St = 0; St < GlobalConstants.total_Students; St++) {
 				int S = Utils.getStudent(St);
-				int Q = 0 + r.nextInt() * (GlobalConstants.total_Questions - 0); 
-				int F = 0 + r.nextInt() * (GlobalConstants.total_Formats - 0); 
+				int Q = 0 + r.nextInt(GlobalConstants.total_Questions); 
+				int F = 0 + r.nextInt(GlobalConstants.total_Formats); 
 				double Applied = 1.0;
 				ArrayList<Integer> KCs = Utils.getQuestionMatrix(Q);
 				for (int list_K = 0; list_K < KCs.size(); list_K++) {
