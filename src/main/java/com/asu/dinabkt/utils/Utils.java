@@ -7,6 +7,7 @@ import com.asu.dinabkt.utils.GlobalConstants;
 
 public class Utils {
 
+
 	private static int[] mKC = new int[GlobalConstants.total_KCs];
 	private static int[] questionsList = new int[GlobalConstants.total_Questions];
 	private static int[] studentsList = new int[GlobalConstants.total_Students];
@@ -14,14 +15,23 @@ public class Utils {
 	// Datastructure to implement Question Qmatrix Slip and Guess
 	static HashMap<Integer, HashMap<Integer, String>> Q_QM_Slip_Guess_map = new HashMap<Integer, HashMap<Integer, String>>();
 
-	// Datastructure to implement Question Qmatrix Slip and Guess
-	static HashMap<Integer, HashMap<Integer, String>> Q_QM_Slip_Guess_Count_map = new HashMap<Integer, HashMap<Integer, String>>();
+	// Datastructure to implement  Slip Count
+	static HashMap<Integer, Double> Q_QM_Slip_Count_map = new HashMap<>();
+	
+	// Datastructure to implement Guess Count
+	static HashMap<Integer, Double> Q_QM_Guess_Count_map = new HashMap<>();
 
-	// Datastructure to implement Question Qmatrix Slip and Guess
-	static HashMap<Integer, HashMap<Integer, String>> Q_QM_Slip_Guess_Opportunities_map = new HashMap<Integer, HashMap<Integer, String>>();
+	// Datastructure to implement Slip Opportunities
+	static HashMap<Integer, Double> Q_QM_Slip_Opportunities_map = new HashMap<>();
 
-	// Datastructure to implement Question Qmatrix Slip and Guess
-	static HashMap<Integer, HashMap<Integer, String>> Q_QM_Slip_Guess_Estimate_map = new HashMap<Integer, HashMap<Integer, String>>();
+	// Datastructure to implement Guess Opportunities
+	static HashMap<Integer, Double> Q_QM_Guess_Opportunities_map = new HashMap<>();
+		
+	// Datastructure to implement Slip Estimate
+	static HashMap<Integer, Double> Q_QM_Slip_Estimate_map = new HashMap<>();
+	
+	// Datastructure to implement Guess Estimate
+	static HashMap<Integer, Double> Q_QM_Guess_Estimate_map = new HashMap<>();
 
 	// Datastructure to implement question id question
 	static HashMap<Integer, Integer> id_question_map = new HashMap<Integer, Integer>();
@@ -32,23 +42,23 @@ public class Utils {
 	// Datastructure to implement Kc InitialMater and Learn
 	static HashMap<Integer, HashMap<Integer, Double>> kc_initialMastery_Learn_map = new HashMap<Integer, HashMap<Integer, Double>>();
 
-	// Datastructure to implement Kc InitialMater and Learn
-	static HashMap<Integer, HashMap<Integer, Double>> kc_initialMastery_Count_map = new HashMap<Integer, HashMap<Integer, Double>>();
+	// Datastructure to implement Kc InitialMater Count
+	static HashMap<Integer, Double> kc_initialMastery_Count_map = new HashMap<Integer, Double>();
 
-	// Datastructure to implement Kc InitialMater and Learn
-	static HashMap<Integer, HashMap<Integer, Double>> kc_initialMastery_Opportunities_map = new HashMap<Integer, HashMap<Integer, Double>>();
+	// Datastructure to implement Kc InitialMater Opportunities
+	static HashMap<Integer, Double> kc_initialMastery_Opportunities_map = new HashMap<Integer, Double>();
 
-	// Datastructure to implement Kc InitialMater and Learn
-	static HashMap<Integer, HashMap<Integer, Double>> kc_initialMastery_Estimate_map = new HashMap<Integer, HashMap<Integer, Double>>();
+	// Datastructure to implement Kc InitialMater Estimate
+	static HashMap<Integer, Double> kc_initialMastery_Estimate_map = new HashMap<Integer, Double>();
 
-	// Datastructure to implement Kc InitialMater and Learn
-	static HashMap<Integer, HashMap<Integer, Double>> kc_LearnCount_map = new HashMap<Integer, HashMap<Integer, Double>>();
+	// Datastructure to implement Kc Learn Count
+	static HashMap<Integer, Double> kc_LearnCount_map = new HashMap<Integer, Double>();
 
-	// Datastructure to implement Kc InitialMater and Learn
-	static HashMap<Integer, HashMap<Integer, Double>> kc_LearnOpportunities_map = new HashMap<Integer, HashMap<Integer, Double>>();
+	// Datastructure to implement Kc  Learn Opportunities
+	static HashMap<Integer, Double> kc_LearnOpportunities_map = new HashMap<Integer, Double>();
 
-	// Datastructure to implement Kc InitialMater and Learn
-	static HashMap<Integer, HashMap<Integer, Double>> kc_LearnEstimate_map = new HashMap<Integer, HashMap<Integer, Double>>();
+	// Datastructure to implement Kc Learn Estimate
+	static HashMap<Integer, Double> kc_LearnEstimate_map = new HashMap<Integer, Double>();
 
 	// Datastructure to implement Competence
 	static HashMap<Integer, HashMap<Integer, Double>> competence_Map = new HashMap<Integer, HashMap<Integer, Double>>();
@@ -77,9 +87,17 @@ public class Utils {
 
 	// Datastructure to implement setBestLearnMap
 	static HashMap<Integer, Double> best_Guess_Map = new HashMap<>();
+	
+	// Datastructure to implement Question(S,A,Q)
+	static HashMap<Integer, HashMap<Integer, Integer>> question_SA_Map = new HashMap<Integer, HashMap<Integer, Integer>>();
 
 	public static void setQuestion(int index, int questionid) {
 		Utils.questionsList[index] = questionid;
+	}
+	
+	public static int getQuestion(int index) {
+		// System.out.println("getQuestion :"+index+" ");
+		return questionsList[index];
 	}
 
 	// ************* Q S G QM **/*******************************
@@ -91,6 +109,10 @@ public class Utils {
 	// **************class question and its id*****************
 	public static void setClassIdQuestion(int index, int questionid) {
 		id_question_map.put(index, questionid);
+	}
+	
+	public static int getClassIdQuestion(int index) {
+		return id_question_map.get(index);
 	}
 
 	/*
@@ -116,21 +138,21 @@ public class Utils {
 	public static int getKc(int index) {
 		return mKC[index];
 	}
-
+	
 	public static void setInitialMasteryMap(int Kc, Double value) {
 		kc_initialMastery_Learn_map.get(Kc).put(GlobalConstants.IM, value);
 	}
 
 	public static void setInitialMasteryCountMap(int Kc, Double value) {
-		kc_initialMastery_Count_map.get(Kc).put(GlobalConstants.IM, value);
+		kc_initialMastery_Count_map.put(Kc, value);
 	}
 
 	public static void setInitialMasteryOpportunitiesMap(int Kc, Double value) {
-		kc_initialMastery_Opportunities_map.get(Kc).put(GlobalConstants.IM, value);
+		kc_initialMastery_Opportunities_map.put(Kc, value);
 	}
 
 	public static void setInitialMasteryEstimateMap(int Kc, Double value) {
-		kc_initialMastery_Estimate_map.get(Kc).put(GlobalConstants.IM, value);
+		kc_initialMastery_Estimate_map.put(Kc, value);
 	}
 
 	public static void setLearnMap(int Kc, Double value) {
@@ -139,15 +161,15 @@ public class Utils {
 	}
 
 	public static void setLearnCountMap(int Kc, Double value) {
-		kc_LearnCount_map.get(Kc).put(GlobalConstants.Learn, value);
+		kc_LearnCount_map.put(Kc, value);
 	}
 
 	public static void setLearnOpportunitiesMap(int Kc, Double value) {
-		kc_LearnOpportunities_map.get(Kc).put(GlobalConstants.Learn, value);
+		kc_LearnOpportunities_map.put(Kc, value);
 	}
 
 	public static void setLearnEstimateMap(int Kc, Double value) {
-		kc_LearnEstimate_map.get(Kc).put(GlobalConstants.Learn, value);
+		kc_LearnEstimate_map.put(Kc, value);
 	}
 
 	public static Double getInitialMasteryMap(int Kc) {
@@ -155,15 +177,15 @@ public class Utils {
 	}
 
 	public static Double getInitialMasteryCountMap(int Kc) {
-		return kc_initialMastery_Count_map.get(Kc).get(GlobalConstants.IM);
+		return kc_initialMastery_Count_map.get(Kc);
 	}
 
 	public static Double getInitialMasteryOpportunitiesMap(int Kc) {
-		return kc_initialMastery_Opportunities_map.get(Kc).get(GlobalConstants.IM);
+		return kc_initialMastery_Opportunities_map.get(Kc);
 	}
 
 	public static Double getInitialMasteryEstimateMap(int Kc) {
-		return kc_initialMastery_Estimate_map.get(Kc).get(GlobalConstants.IM);
+		return kc_initialMastery_Estimate_map.get(Kc);
 	}
 
 	public static Double getLearnMap(int Kc) {
@@ -171,15 +193,15 @@ public class Utils {
 	}
 
 	public static Double getLearnCountMap(int Kc) {
-		return kc_LearnCount_map.get(Kc).get(GlobalConstants.Learn);
+		return kc_LearnCount_map.get(Kc);
 	}
 
 	public static Double getLearnOpportunitiesMap(int Kc) {
-		return kc_LearnOpportunities_map.get(Kc).get(GlobalConstants.Learn);
+		return kc_LearnOpportunities_map.get(Kc);
 	}
 
 	public static Double getLearnEstimateMap(int Kc) {
-		return kc_LearnEstimate_map.get(Kc).get(GlobalConstants.Learn);
+		return kc_LearnEstimate_map.get(Kc);
 	}
 
 	public static void setSlipMap(int format, Double value) {
@@ -199,53 +221,57 @@ public class Utils {
 	}
 
 	public static void setSlipCountMap(int format, Double value) {
-		Q_QM_Slip_Guess_Count_map.get(format).put(GlobalConstants.Slip, value.toString());
+		Q_QM_Slip_Count_map.put(format, value);
 	}
 
 	public static void setGuessCountMap(int format, Double value) {
-		Q_QM_Slip_Guess_Count_map.get(format).put(GlobalConstants.Guess, value.toString());
+		Q_QM_Guess_Count_map.put(format, value);
 	}
 
 	public static Double getSlipCountMap(int format) {
-		return new Double(Q_QM_Slip_Guess_Count_map.get(format).get(GlobalConstants.Slip));
+		return new Double(Q_QM_Slip_Count_map.get(format));
 	}
 
 	public static Double getGuessCountMap(int format) {
-		return new Double(Q_QM_Slip_Guess_Count_map.get(format).get(GlobalConstants.Guess));
+		return new Double(Q_QM_Guess_Count_map.get(format));
 	}
 
 	public static void setSlipOpportunitiesMap(int format, Double value) {
-		Q_QM_Slip_Guess_Opportunities_map.get(format).put(GlobalConstants.Slip, value.toString());
+		Q_QM_Slip_Opportunities_map.put(format, value);
 	}
 
 	public static void setGuessOpportunitiesMap(int format, Double value) {
-		Q_QM_Slip_Guess_Opportunities_map.get(format).put(GlobalConstants.Guess, value.toString());
+		Q_QM_Guess_Opportunities_map.put(format, value);
 	}
 
 	public static Double getSlipOpportunitiesMap(int format) {
-		return new Double(Q_QM_Slip_Guess_Opportunities_map.get(format).get(GlobalConstants.Slip));
+		return new Double(Q_QM_Slip_Opportunities_map.get(format));
 	}
 
 	public static Double getGuessOpportunitiesMap(int format) {
-		return new Double(Q_QM_Slip_Guess_Opportunities_map.get(format).get(GlobalConstants.Guess));
+		return new Double(Q_QM_Guess_Opportunities_map.get(format));
 	}
 
 	public static void setSlipEstimateMap(int format, Double value) {
-		Q_QM_Slip_Guess_Estimate_map.get(format).put(GlobalConstants.Slip, value.toString());
+		Q_QM_Slip_Estimate_map.put(format, value);
 	}
 
 	public static void setGuessEstimateMap(int format, Double value) {
-		Q_QM_Slip_Guess_Estimate_map.get(format).put(GlobalConstants.Guess, value.toString());
+		Q_QM_Guess_Estimate_map.put(format, value);
 	}
 
 	public static Double getSlipEstimateMap(int format) {
-		return new Double(Q_QM_Slip_Guess_Estimate_map.get(format).get(GlobalConstants.Slip));
+		return new Double(Q_QM_Slip_Estimate_map.get(format));
 	}
 
 	public static Double getGuessEstimateMap(int format) {
-		return new Double(Q_QM_Slip_Guess_Estimate_map.get(format).get(GlobalConstants.Guess));
+		return new Double(Q_QM_Guess_Estimate_map.get(format));
 	}
 
+	public static void setStudent(int index, int studentid) {
+		Utils.studentsList[index] = studentid;
+	}
+	
 	public static int getStudent(int index) {
 		return studentsList[index];
 	}
@@ -346,5 +372,33 @@ public class Utils {
 	}
 	public static double getBestGuessMap(int F) {
 		return best_Guess_Map.get(F);
+	}
+	public static void setKc(int index, int questionid) {
+		mKC[index] = questionid;
+	}
+	
+	public static void setKcMap(int Kc) {
+		HashMap<Integer, Double> map = new HashMap<Integer, Double>();
+		kc_initialMastery_Learn_map.put(Kc, map);
+	}
+	public static void setStudentsList(int[] studentsList) {
+		Utils.studentsList = studentsList;
+	}
+	
+	public static int[] getStudentsList() {
+		return studentsList;
+	}
+	/*
+	 * Question
+	 */
+	public static void setQuestionSAMap(int s, HashMap<Integer, Integer> question_AQ_Map) {
+		//System.out.println("Set SQA :"+s+" "+question_AQ_Map);
+		question_SA_Map.put(s, question_AQ_Map);
+	}
+
+	public static int getQuestionSAMap(int S, int A) {
+		HashMap<Integer, Integer> innerAQ_map = question_SA_Map.get(S);
+		//System.out.println("get SAQ :"+S+" "+A+" "+innerAQ_map.get(A));
+		return innerAQ_map.get(A);
 	}
 }

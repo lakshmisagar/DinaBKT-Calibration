@@ -2,19 +2,34 @@ package com.asu.calibration.DianBKT.models;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Table
+@Entity
 public class seatr_message implements Serializable{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8970977115131474109L;
-
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name = "id")
 	private int id;
+	@Column(name = "student_id")
 	private int student_id;
+	@Column(name = "question_id")
 	private int question_id;
+	@Column(name = "format_id")
 	private int format_id;
+	@Column(name = "correct")
 	private int correct;
+	@Column(name = "timestamp")
 	private String timestamp;
 	
 	public seatr_message() {

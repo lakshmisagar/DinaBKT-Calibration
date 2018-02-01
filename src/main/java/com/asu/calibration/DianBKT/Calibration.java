@@ -1,13 +1,19 @@
 package com.asu.calibration.DianBKT;
 
-import java.rmi.server.Operation;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
+import com.asu.calibration.DianBKT.models.seatr_message;
+import com.asu.dinabkt.database.SessionFactoryUtil;
 import com.asu.dinabkt.database.SimulateDataBase;
 import com.asu.dinabkt.utils.GlobalConstants;
-import com.asu.dinabkt.utils.Utils;
-import com.asu.dinabkt.utils.Operations;;
+import com.asu.dinabkt.utils.Operations;
+import com.asu.dinabkt.utils.Utils;;
 
 public class Calibration {
 	static int climb = 0;
@@ -25,14 +31,21 @@ public class Calibration {
 	static double AUC = 0.0;
 
 	private static Double climbOneStep() {
-		// intialization();
+		intialization();
+		
+		/*SessionFactory sf_OPE_Class_25 = SessionFactoryUtil.getSessionFactory(GlobalConstants.OPE_Class_25);
+		Session session25 = sf_OPE_Class_25.openSession();
+		
+		String seatrMsg_hql = "FROM seatr_message";
+		Query seatrMSGquery = session25.createQuery(seatrMsg_hql);
+		List<seatr_message> qResult = seatrMSGquery.list();
+		System.out.println(qResult.size()+"  "+qResult);*/
 		//processResponseFromOPE();
 		GaugeProcess();
 		return null;
 	}
 
-	private static void processResponseFromOPE(int S, int Q, int F, int Answer, String timeStamp) {
-
+	private static void intialization() {
 		CorrectAnswers = 0;
 		InCorrectAnswers = 0;
 		TP = new int[GlobalConstants.total_Threshold];
@@ -49,7 +62,12 @@ public class Calibration {
 				prior_KV_Map.put(Kc, Utils.getInitialMasteryMap(Kc));
 				Utils.setPrior(Student, prior_KV_Map);
 			}
-		}
+		}		
+	}
+
+	private static void processResponseFromOPE(int S, int Q, int F, int Answer, String timeStamp) {
+
+
 
 		Utils.setLast(S, Utils.getLast(S) + 1);
 		message_A = Utils.getLast(S);

@@ -1,18 +1,16 @@
 package com.asu.dinabkt.database;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Random;
+import java.util.Set;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 
 import com.asu.calibration.DianBKT.models.seatr_message;
 import com.asu.dinabkt.utils.GlobalConstants;
-import com.asu.dinabkt.utils.Operations;
 import com.asu.dinabkt.utils.Utils;
 
 public class SimulateDataBase {
@@ -29,12 +27,34 @@ public class SimulateDataBase {
 		GlobalConstants.total_Formats = 6;
 		GlobalConstants.total_Threshold = 25;
 		GlobalConstants.total_attempts_per_student = (2*GlobalConstants.total_Questions);
+	
+		setKcMap();
+		setStudentList();
 		setQMatrix();
-		fillRandomParameters();
-		setCompetence();
+		setSQMap();
+		//fillRandomParameters();
+		//setCompetence();
 		generateMessagesToSeatr();
+		
 	}
-
+	//KC
+	private static void setKcMap() {
+		for (int i = 0; i < GlobalConstants.total_KCs; i++) {
+			int kcValue = i;
+			Utils.setKc(i, kcValue);
+			Utils.setKcMap(kcValue);
+		}
+	}
+	
+	//S
+	private static void setStudentList() {
+		int[] ids = new int[GlobalConstants.total_Students];
+		for (int i = 0; i < GlobalConstants.total_Students; i++) {
+			ids[i] = i;
+		}
+		Utils.setStudentsList(ids);
+	}
+	
 	private static void setQMatrix() {
 		Random r = new Random();
 		for (int q = 0; q < GlobalConstants.total_Questions; q++) {
@@ -49,6 +69,45 @@ public class SimulateDataBase {
 		}
 	}
 	
+	// set of Q answered by student
+		private static void setSQMap() {
+			Random r = new Random();
+			for (int st = 0; st < GlobalConstants.total_Students; st++) {
+				int id = st;
+				HashMap<Integer, Integer> question_AQ_Map = new HashMap<Integer, Integer>();
+				HashMap<Integer, Integer> answer_AC_Map = new HashMap<Integer, Integer>();
+				HashMap<Integer, Integer> inner_setAnswer = new HashMap<Integer, Integer>();
+				int numberOfQuestionsAttempted =/* r.nextInt((*/GlobalConstants.total_Questions /*- 1) + 1) + 1*/;
+				Set<Integer> generated = new LinkedHashSet<Integer>();
+				while(generated.size()<numberOfQuestionsAttempted){
+					int Q = r.nextInt(((GlobalConstants.total_Questions - 1) - 0) + 1) + 0;
+					generated.add(Q);
+				}
+				for(Integer Q : generated){
+					inner_setAnswer.put(Q, 0);
+	 				int correct = (Math.random() < 0.5) ? 0 :1;
+					//int correct = 0;
+					int count = Utils.getLast(id);
+					count++;
+					Utils.setLast(id, count);
+					int A = count;
+					/*if(A==1)correct=1;
+					if(A==2)correct=0;
+					if(A==3)correct=0;
+					if(A==4)correct=1;*/
+					answer_AC_Map.put(A, correct);
+					Utils.setAnswer(st, answer_AC_Map);
+					question_AQ_Map.put(A, Q);
+					//System.out.println("setQuestion "+st+" "+A+" "+Q);
+					Utils.setQuestionSAMap(st, question_AQ_Map);
+					//System.out.println("getQuestion ("+st+","+A+") "+Utils.getQuestion(st, A));
+					//System.out.println(st+" "+A+" "+Q+" = "+correct);
+					//System.out.println("1 SAGAR getAnswer_S_A_Q("+st+","+A+","+Utils.getQuestion(st, A)+")"+Utils.getAnswer(st, A));
+				}
+				//Utils.simulateInitalizeSetAnswer(id,inner_setAnswer);
+			}
+		}
+		
 	public static void fillRandomParameters() {
 		Random r = new Random();
 		for (int KcIndex = 0; KcIndex < GlobalConstants.total_KCs; KcIndex++) {
@@ -85,9 +144,13 @@ public class SimulateDataBase {
 	}
 	private static void generateMessagesToSeatr() {
 		Random r = new Random();
-		sf_OPE_Class_25 = new Configuration().configure(GlobalConstants.OPE_Class_25).buildSessionFactory();
-		Session session25 = sf_OPE_Class_25.openSession();
-		for(int A=0;A<GlobalConstants.total_attempts_per_student;A++){
+		sf_OPE_Class_25 = SessionFactoryUtil.getSessionFactory();
+		session25 = sf_OPE_Class_25.openSession();
+		
+		sendMessageToSeatrTable(2,2,2,2,"timestamp");
+		
+		
+		/*for(int A=0;A<GlobalConstants.total_attempts_per_student;A++){
 			for (int St = 0; St < GlobalConstants.total_Students; St++) {
 				int S = Utils.getStudent(St);
 				int Q = 0 + r.nextInt() * (GlobalConstants.total_Questions - 0); 
@@ -115,16 +178,18 @@ public class SimulateDataBase {
 				String timeStamp = new Timestamp(System.currentTimeMillis()).toString();
 				sendMessageToSeatrTable(S,Q,F,Answer,timeStamp);
 			}
-		}
+		}*/
 		session25.disconnect();
 		session25.close();
 	}
 
 	private static void sendMessageToSeatrTable(int s, int q, int f, int answer, String timeStamp) {
+		
 		Transaction tx = session25.beginTransaction();
 		seatr_message message = new seatr_message(s,q,f,answer,timeStamp);
 		session25.save(message);
 		tx.commit();
+		
 	}
 	
 	
