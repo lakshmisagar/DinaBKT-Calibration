@@ -101,9 +101,9 @@ public class Utils {
 	}
 
 	// ************* Q S G QM **/*******************************
-	public static void setQuestionMap(int question) {
+	public static void setFormatMap(int format) {
 		HashMap<Integer, String> map = new HashMap<Integer, String>();
-		Q_QM_Slip_Guess_map.put(question, map);
+		Q_QM_Slip_Guess_map.put(format, map);
 	}
 
 	// **************class question and its id*****************
@@ -310,19 +310,31 @@ public class Utils {
 	/*
 	 * Prior
 	 */
-	public static void setPrior(int S, HashMap<Integer, Double> prior_KV_Map) {
+	public static void setPriorMap(int S, HashMap<Integer, Double> prior_KV_Map) {
+		//System.out.println("setprior from" +v+ "  S : " + S+" val "+ prior_KV_Map);
 		prior_Map.put(S, prior_KV_Map);
+	}
+
+	public static double getPriorMap(int S, int Kc) {
+		HashMap<Integer, Double> inner_Prior_map = prior_Map.get(S);
+		//System.out.println("getPrior from"+v+"  S" + S + "Kc" + Kc + "value :" +inner_Prior_map.get(Kc));
+		return inner_Prior_map.get(Kc);
+	}
+	/*
+	 * Prior setters and getters
+	 */
+	public static void setPrior(Integer S, Integer kc, double value) {
+		prior_Map.get(S).put(kc, value); 
 	}
 
 	public static double getPrior(int S, int Kc) {
 		HashMap<Integer, Double> inner_Prior_map = prior_Map.get(S);
 		return inner_Prior_map.get(Kc);
 	}
-
 	/*
 	 * Posterior
 	 */
-	public static void setPosterior(int S, HashMap<Integer, Double> posterior_KV_Map) {
+	public static void setPosteriorMap(int S, HashMap<Integer, Double> posterior_KV_Map) {
 		posterior_Map.put(S, posterior_KV_Map);
 	}
 
@@ -331,6 +343,9 @@ public class Utils {
 		return inner_Posterior_map.get(Kc);
 	}
 
+	public static void setPosterior(int S, int kc, double value) {
+		posterior_Map.get(S).put(kc, value);
+	}
 	/*
 	 * Last
 	 */

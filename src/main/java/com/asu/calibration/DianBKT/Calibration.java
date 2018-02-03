@@ -62,12 +62,22 @@ public class Calibration {
 		}
 		for (int St = 0; St < GlobalConstants.total_Students; St++) {
 			int Student = Utils.getStudent(St);
+			HashMap<Integer, Double> prior_KV_Map = new HashMap<>();
 			for (int K = 0; K < GlobalConstants.total_KCs; K++) {
 				int Kc = Utils.getKc(K);
-				HashMap<Integer, Double> prior_KV_Map = new HashMap<>();
 				prior_KV_Map.put(Kc, Utils.getInitialMasteryMap(Kc));
-				Utils.setPrior(Student, prior_KV_Map);
 			}
+			Utils.setPriorMap(Student, prior_KV_Map);
+		}		
+		
+		for (int St = 0; St < GlobalConstants.total_Students; St++) {
+			int Student = Utils.getStudent(St);
+			HashMap<Integer, Double> posterior_Map = new HashMap<>();
+			for (int K = 0; K < GlobalConstants.total_KCs; K++) {
+				int Kc = Utils.getKc(K);
+				posterior_Map.put(Kc, 0.0);
+			}
+			Utils.setPosteriorMap(Student, posterior_Map);
 		}		
 	}
 
@@ -101,6 +111,7 @@ public class Calibration {
 		double one_minus_slip = Operations.substractDouble((double) 1, Utils.getSlipMap(F));
 		double one_minus_slip_mul_applied = Operations.multiplyDouble(one_minus_slip, Applied);
 		double Prediction = Operations.addDouble(one_minus_slip_mul_applied, guess_mul_one_minus_applied);
+		System.out.println("one_minus_slip" + one_minus_slip + "applied: " + Applied + " one_minus_slip_mul_applied : " + one_minus_slip_mul_applied + "one_minus_applied: " + one_minus_applied + " guessMap " + Utils.getGuessMap(F) + " : guess_mul_one_minus_applied "+ guess_mul_one_minus_applied );
 
 		// if the threshold T/NThresholds is below the predicted probability of
 		// correctness, then the prediction made by a model using
@@ -110,6 +121,7 @@ public class Calibration {
 		// and probability of correctness
 
 		for (int T = 0; T <= (GlobalConstants.total_Threshold * Prediction); T++) {
+			System.out.println("Prediction : " + Prediction + " T : " + T);
 			if (Answer == 1) {
 				TP[T]++;
 			} else {
@@ -126,9 +138,9 @@ public class Calibration {
 				double Temp_mul_Guess = Operations.multiplyDouble(Temp, Utils.getGuessMap(F));
 				double numPart1 = Operations.addDouble(one_minus_slip_mul_applied, Temp_mul_Guess);
 				double value1 = Operations.divideDouble(numPart1, Prediction);
-				HashMap<Integer, Double> posterior_KV_Map = new HashMap<>();
-				posterior_KV_Map.put(message_KCs.get(list_K), value1);
-				Utils.setPosterior(S, posterior_KV_Map);
+				//HashMap<Integer, Double> posterior_KV_Map = new HashMap<>();
+				//posterior_KV_Map.put(message_KCs.get(list_K), value1);
+				Utils.setPosterior(S, message_KCs.get(list_K), value1);
 			} else {
 				double one_minus_guess = Operations.substractDouble((double) 1, Utils.getGuessMap(F));
 				double temp_mul_one_minus_guess = Operations.multiplyDouble(Temp, one_minus_guess);
@@ -136,9 +148,9 @@ public class Calibration {
 				double numPart2 = Operations.addDouble(applied_mul_slip, temp_mul_one_minus_guess);
 				double one_minus_prediction = Operations.substractDouble((double) 1, Prediction);
 				double value2 = Operations.divideDouble(numPart2, one_minus_prediction);
-				HashMap<Integer, Double> posterior_KV_Map = new HashMap<>();
-				posterior_KV_Map.put(message_KCs.get(list_K), value2);
-				Utils.setPosterior(S, posterior_KV_Map);
+				//HashMap<Integer, Double> posterior_KV_Map = new HashMap<>();
+				//posterior_KV_Map.put(message_KCs.get(list_K), value2);
+				Utils.setPosterior(S, message_KCs.get(list_K), value2);
 			}
 			double one_minus_posterior = Operations.substractDouble((double) 1,
 					Utils.getPosterior(S, message_KCs.get(list_K)));
@@ -146,9 +158,9 @@ public class Calibration {
 					one_minus_posterior);
 			double valuePrior = Operations.addDouble(Utils.getPosterior(S, message_KCs.get(list_K)),
 					learn_mul_one_minus_posterior);
-			HashMap<Integer, Double> prior_KV_Map = new HashMap<>();
-			prior_KV_Map.put(message_KCs.get(list_K), valuePrior);
-			Utils.setPrior(S, prior_KV_Map); 
+			//HashMap<Integer, Double> prior_KV_Map = new HashMap<>();
+			//prior_KV_Map.put(message_KCs.get(list_K), valuePrior);
+			Utils.setPrior(S, message_KCs.get(list_K), valuePrior); 
 			if (message_A > 1) {
 				double one_minus_PosteriorOfPreceding = Operations.substractDouble((double) 1, PosteriorOfPreceding);
 				double one_minus_PosteriorOfPreceding_mul_posterior = Operations
@@ -289,7 +301,7 @@ public class Calibration {
 
 	public static void START(){
 		SimulateDataBase.setAllStudentsData();
-		while (climb < 100) {
+		while (climb < 10) {
 			findLocalMaximum();
 			if (AUC > BestAUC) {
 				saveGlobalMaximum();
