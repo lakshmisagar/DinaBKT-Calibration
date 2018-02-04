@@ -1,5 +1,7 @@
 package com.asu.calibration.DianBKT;
 
+import java.io.FileNotFoundException;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -16,10 +18,11 @@ public class MyResource {
      * to the client as "text/plain" media type.
      *
      * @return String that will be returned as a text/plain response.
+     * @throws FileNotFoundException 
      */
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String getIt() {
+    public String getIt() throws FileNotFoundException {
     	System.out.println("HITTING");
     	
 

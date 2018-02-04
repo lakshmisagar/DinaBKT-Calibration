@@ -217,7 +217,16 @@ private static void initializeLastS() {
 		Random r = new Random();
 		sf_OPE_Class_25 = SessionFactoryUtil.getSessionFactory();
 		session25 = sf_OPE_Class_25.openSession();
-		
+	/*	create table seatr_message(
+				  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+				  `student_id` int(11) unsigned NOT NULL,
+				  `question_id` int(11) unsigned DEFAULT NULL,
+				  `format_id` int(11) unsigned DEFAULT NULL,
+				  `correct` tinyint(4) NOT NULL,
+				  `timestamp` VARCHAR(100) NOT NULL,
+				   PRIMARY KEY (`id`)
+				   );*/
+		session25.createQuery("delete from seatr_message").executeUpdate();
 		for(int A=0;A<GlobalConstants.total_attempts_per_student;A++){
 			for (int St = 0; St < GlobalConstants.total_Students; St++) {
 				int S = Utils.getStudent(St);

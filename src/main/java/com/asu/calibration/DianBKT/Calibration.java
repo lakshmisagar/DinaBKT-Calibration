@@ -1,5 +1,8 @@
 package com.asu.calibration.DianBKT;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +43,7 @@ public class Calibration {
 		Query seatrMSGquery = session25.createQuery(seatrMsg_hql);
 		List<seatr_message> qResult = seatrMSGquery.list();
 		for(seatr_message m:qResult){
-			System.out.println("Student_id:"+m.getStudent_id()+"  Quetion_id:"+m.getQuestion_id()+"  format_id:"+m.getFormat_id()+" correct:"+m.getCorrect()+" timestamp:"+m.getTimestamp());
+			//System.out.println("Student_id:"+m.getStudent_id()+"  Quetion_id:"+m.getQuestion_id()+"  format_id:"+m.getFormat_id()+" correct:"+m.getCorrect()+" timestamp:"+m.getTimestamp());
 			processResponseFromOPE(m.getStudent_id(),m.getQuestion_id(),m.getFormat_id(),m.getCorrect(),m.getTimestamp());
 		}
     	
@@ -82,8 +85,9 @@ public class Calibration {
 	}
 
 	private static void processResponseFromOPE(int S, int Q, int F, int Answer, String timeStamp) {
-
-
+		System.out.println();
+		System.out.println();
+		System.out.println("processResponseFromOPE");
 
 		Utils.setLast(S, Utils.getLast(S) + 1);
 		message_A = Utils.getLast(S);
@@ -101,11 +105,14 @@ public class Calibration {
 		double Applied = 1.0; // Applied is the probability that all the
 								// relevant KCs were mastered and thus applied
 		for (int list_K = 0; list_K < message_KCs.size(); list_K++) {
+			System.out.println("Applied :"+Applied+"  Prior :"+Utils.getPrior(S, message_KCs.get(list_K)));
 			Applied = Operations.multiplyDouble(Utils.getPrior(S, message_KCs.get(list_K)), Applied);
+			System.out.println("New Applied :"+Applied);
+			
 		}
 		// Prediction is the probability of a correct answer. Follows from the
 		// definition of slip and guess
-
+		System.out.println("Final Applied :"+Applied);
 		double one_minus_applied = Operations.substractDouble((double) 1, Applied);
 		double guess_mul_one_minus_applied = Operations.multiplyDouble(Utils.getGuessMap(F), one_minus_applied);
 		double one_minus_slip = Operations.substractDouble((double) 1, Utils.getSlipMap(F));
@@ -121,7 +128,7 @@ public class Calibration {
 		// and probability of correctness
 
 		for (int T = 0; T <= (GlobalConstants.total_Threshold * Prediction); T++) {
-			System.out.println("Prediction : " + Prediction + " T : " + T);
+			//System.out.println("Prediction : " + Prediction + " T : " + T);
 			if (Answer == 1) {
 				TP[T]++;
 			} else {
@@ -134,33 +141,39 @@ public class Calibration {
 				PosteriorOfPreceding = Utils.getPosterior(S, message_KCs.get(list_K)); 
 			}
 			double Temp = Operations.substractDouble(Utils.getPrior(S, message_KCs.get(list_K)), Applied);
+			System.out.println("Temp :"+Temp);
+			double value;
 			if (Answer == 1) {
 				double Temp_mul_Guess = Operations.multiplyDouble(Temp, Utils.getGuessMap(F));
 				double numPart1 = Operations.addDouble(one_minus_slip_mul_applied, Temp_mul_Guess);
-				double value1 = Operations.divideDouble(numPart1, Prediction);
+				value = Operations.divideDouble(numPart1, Prediction);
+				System.out.println("Prediction ;"+Prediction);
 				//HashMap<Integer, Double> posterior_KV_Map = new HashMap<>();
 				//posterior_KV_Map.put(message_KCs.get(list_K), value1);
-				Utils.setPosterior(S, message_KCs.get(list_K), value1);
 			} else {
 				double one_minus_guess = Operations.substractDouble((double) 1, Utils.getGuessMap(F));
 				double temp_mul_one_minus_guess = Operations.multiplyDouble(Temp, one_minus_guess);
 				double applied_mul_slip = Operations.multiplyDouble(Applied, Utils.getSlipMap(F));
 				double numPart2 = Operations.addDouble(applied_mul_slip, temp_mul_one_minus_guess);
 				double one_minus_prediction = Operations.substractDouble((double) 1, Prediction);
-				double value2 = Operations.divideDouble(numPart2, one_minus_prediction);
+				value = Operations.divideDouble(numPart2, one_minus_prediction);
+				System.out.println("one_minus_prediction :"+one_minus_prediction);
 				//HashMap<Integer, Double> posterior_KV_Map = new HashMap<>();
 				//posterior_KV_Map.put(message_KCs.get(list_K), value2);
-				Utils.setPosterior(S, message_KCs.get(list_K), value2);
 			}
+			System.out.println("POSTERIOR VALUE :"+value);
+			Utils.setPosterior(S, message_KCs.get(list_K), value);
 			double one_minus_posterior = Operations.substractDouble((double) 1,
 					Utils.getPosterior(S, message_KCs.get(list_K)));
 			double learn_mul_one_minus_posterior = Operations.multiplyDouble(Utils.getLearnMap(message_KCs.get(list_K)),
 					one_minus_posterior);
+			System.out.println("getPosterior :"+Utils.getPosterior(S, message_KCs.get(list_K)) +" + (learn*(1-p) "+learn_mul_one_minus_posterior);
 			double valuePrior = Operations.addDouble(Utils.getPosterior(S, message_KCs.get(list_K)),
 					learn_mul_one_minus_posterior);
 			//HashMap<Integer, Double> prior_KV_Map = new HashMap<>();
 			//prior_KV_Map.put(message_KCs.get(list_K), valuePrior);
 			Utils.setPrior(S, message_KCs.get(list_K), valuePrior); 
+			System.out.println("PRIOR VALUE :"+valuePrior);
 			if (message_A > 1) {
 				double one_minus_PosteriorOfPreceding = Operations.substractDouble((double) 1, PosteriorOfPreceding);
 				double one_minus_PosteriorOfPreceding_mul_posterior = Operations
@@ -299,8 +312,10 @@ public class Calibration {
 		keepClimbing();
 	}
 
-	public static void START(){
+	public static void START() throws FileNotFoundException{
 		SimulateDataBase.setAllStudentsData();
+		PrintStream o = new PrintStream(new File("C:/Users/lkusnoor/Downloads/LOGS/MAIN/NEW/CALIB3.txt"));
+		System.setOut(o);
 		while (climb < 10) {
 			findLocalMaximum();
 			if (AUC > BestAUC) {
