@@ -115,9 +115,11 @@ public class Calibration {
 		System.out.println("Final Applied :"+Applied);
 		double one_minus_applied = Operations.substractDouble((double) 1, Applied);
 		double guess_mul_one_minus_applied = Operations.multiplyDouble(Utils.getGuessMap(F), one_minus_applied);
+		System.out.println("slip :"+Utils.getSlipMap(F));
 		double one_minus_slip = Operations.substractDouble((double) 1, Utils.getSlipMap(F));
 		double one_minus_slip_mul_applied = Operations.multiplyDouble(one_minus_slip, Applied);
 		double Prediction = Operations.addDouble(one_minus_slip_mul_applied, guess_mul_one_minus_applied);
+		System.out.println("Prediction :"+Prediction);
 		System.out.println("one_minus_slip" + one_minus_slip + "applied: " + Applied + " one_minus_slip_mul_applied : " + one_minus_slip_mul_applied + "one_minus_applied: " + one_minus_applied + " guessMap " + Utils.getGuessMap(F) + " : guess_mul_one_minus_applied "+ guess_mul_one_minus_applied );
 
 		// if the threshold T/NThresholds is below the predicted probability of
@@ -200,11 +202,11 @@ public class Calibration {
 		}
 		double guessOpportunities_plus_one_minus_applied = Operations.addDouble(Utils.getGuessOpportunitiesMap(F),
 				Operations.substractDouble((double) 1, Applied));
-		Utils.setGuessCountMap(F, guessOpportunities_plus_one_minus_applied);
+		Utils.setGuessOpportunitiesMap(F, guessOpportunities_plus_one_minus_applied);
 
 		double slipOpportnities_plus_applied = Operations.addDouble(Utils.getSlipOpportunitiesMap(F), Applied);
-		Utils.setSlipCountMap(F, slipOpportnities_plus_applied);
-
+		Utils.setSlipOpportunitiesMap(F, slipOpportnities_plus_applied);
+		
 		if (message_A == 1) {
 			for (int list_K = 0; list_K < message_KCs.size(); list_K++) {
 				Utils.setInitialMasteryCountMap(message_KCs.get(list_K),
@@ -277,6 +279,7 @@ public class Calibration {
 	}
 
 	private static void keepClimbing() {
+		System.out.println("keepClimbing() ");
 		while (Changers > 10) {
 			for (int kc = 0; kc < GlobalConstants.total_KCs; kc++) {
 				int K = Utils.getKc(kc);
@@ -293,6 +296,7 @@ public class Calibration {
 	}
 
 	private static void saveGlobalMaximum() {
+		System.out.println("saveGlobalMaximum");
 		for (int kc = 0; kc < GlobalConstants.total_KCs; kc++) {
 			int K = Utils.getKc(kc);
 			Utils.setBestLearnMap(K, Utils.getLearnMap(K));
@@ -314,7 +318,7 @@ public class Calibration {
 
 	public static void START() throws FileNotFoundException{
 		SimulateDataBase.setAllStudentsData();
-		PrintStream o = new PrintStream(new File("C:/Users/lkusnoor/Downloads/LOGS/MAIN/NEW/CALIB3.txt"));
+		PrintStream o = new PrintStream(new File("C:/Users/lkusnoor/Downloads/LOGS/CALIB3.txt"));
 		System.setOut(o);
 		while (climb < 10) {
 			findLocalMaximum();
