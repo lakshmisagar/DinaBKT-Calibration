@@ -95,6 +95,7 @@ public class Calibration {
 		message_answer = Answer;
 		message_F = F;
 		message_KCs = Utils.getQuestionMatrix(Q);
+		System.out.println("QMatrix:"+Utils.getQuestionMatrix(Q)+" message_KCs:"+message_KCs);
 		if (Answer == 1) {
 			CorrectAnswers++;
 		} else {
@@ -105,7 +106,7 @@ public class Calibration {
 		double Applied = 1.0; // Applied is the probability that all the
 								// relevant KCs were mastered and thus applied
 		for (int list_K = 0; list_K < message_KCs.size(); list_K++) {
-			System.out.println("Applied :"+Applied+"  Prior :"+Utils.getPrior(S, message_KCs.get(list_K)));
+			System.out.println("list_K :"+message_KCs.get(list_K)+" getPrior:"+Utils.getPrior(S, message_KCs.get(list_K))+"Applied :"+Applied);
 			Applied = Operations.multiplyDouble(Utils.getPrior(S, message_KCs.get(list_K)), Applied);
 			System.out.println("New Applied :"+Applied);
 			
@@ -142,6 +143,7 @@ public class Calibration {
 			if (message_A > 1) {
 				PosteriorOfPreceding = Utils.getPosterior(S, message_KCs.get(list_K)); 
 			}
+			System.out.println("list_K :"+message_KCs.get(list_K)+" getPrior:"+Utils.getPrior(S, message_KCs.get(list_K))+"Applied :"+Applied);
 			double Temp = Operations.substractDouble(Utils.getPrior(S, message_KCs.get(list_K)), Applied);
 			System.out.println("Temp :"+Temp);
 			double value;

@@ -325,7 +325,7 @@ public class Utils {
 	/*
 	 * Prior setters and getters
 	 */
-	public static void setPrior(Integer S, Integer kc, double value) {
+	public static void setPrior(int S, int kc, double value) {
 		prior_Map.get(S).put(kc, value); 
 	}
 

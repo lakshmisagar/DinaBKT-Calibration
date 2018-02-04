@@ -3,6 +3,7 @@ package com.asu.dinabkt.database;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Random;
 import java.util.Set;
@@ -133,9 +134,14 @@ private static void initializeLastS() {
 			//Utils.setQuestionMap(q);
 			Utils.setClassIdQuestion(q, q);
 			int n_KCs = r.nextInt((GlobalConstants.total_KCs - 1) + 1) + 1;
-			for (int j = 0; j < n_KCs; j++) {
+			Set<Integer> generated = new LinkedHashSet<Integer>();
+			while(generated.size()<n_KCs){
 				int kc = r.nextInt(((GlobalConstants.total_KCs - 1) - 0) + 1) + 0;
-				Utils.setQuestionMatrix(q, kc);
+				generated.add(kc);
+			}
+			Iterator<Integer> itr = generated.iterator();
+			while(itr.hasNext()){
+				Utils.setQuestionMatrix(q, itr.next());
 			}
 		}
 	}
