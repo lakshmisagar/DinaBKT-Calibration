@@ -205,7 +205,7 @@ public class Utils {
 	}
 
 	public static void setSlipMap(int format, Double value) {
-		System.out.println("setSlipMap: format"+format+" value"+value);
+		//System.out.println("setSlipMap: format"+format+" value"+value);
 		Q_QM_Slip_Guess_map.get(format).put(GlobalConstants.Slip, value.toString());
 	}
 
@@ -214,7 +214,7 @@ public class Utils {
 	}
 
 	public static Double getSlipMap(int format) {
-		System.out.println("getSlipMap: format"+format+" value"+Q_QM_Slip_Guess_map.get(format).get(GlobalConstants.Slip));
+		//System.out.println("getSlipMap: format"+format+" value"+Q_QM_Slip_Guess_map.get(format).get(GlobalConstants.Slip));
 		return new Double(Q_QM_Slip_Guess_map.get(format).get(GlobalConstants.Slip));
 	}
 

@@ -282,7 +282,7 @@ public class Calibration {
 
 	private static void keepClimbing() {
 		//System.out.println("keepClimbing() ");
-		if (Changers > 10) {
+		while (Changers > 10) {
 			for (int kc = 0; kc < GlobalConstants.total_KCs; kc++) {
 				int K = Utils.getKc(kc);
 				Utils.setLearnMap(K, Utils.getLearnEstimateMap(K));
@@ -294,9 +294,8 @@ public class Calibration {
 				Utils.setGuessMap(F, Utils.getGuessEstimateMap(F));
 			}
 			climbOneStep();
-		}else{
-			climb++;
 		}
+		climb++;
 	}
 
 	private static void saveGlobalMaximum() {
@@ -328,9 +327,10 @@ public class Calibration {
 		SimulateDataBase.setAllStudentsData();
 		PrintStream o = new PrintStream(new File("C:/Users/lkusnoor/Downloads/LOGS/CALIB3.txt"));
 		System.setOut(o);
-		while (climb < 10) {
+		while (climb < 100) {
 			System.out.println("CLIMB:"+climb);
 			findLocalMaximum();
+			System.out.println("AUC:"+AUC+" BestAUC"+BestAUC);
 			if (AUC > BestAUC) {
 				saveGlobalMaximum();
 				BestAUC = AUC;
