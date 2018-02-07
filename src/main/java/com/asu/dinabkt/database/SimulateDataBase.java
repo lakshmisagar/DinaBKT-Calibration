@@ -27,9 +27,9 @@ public class SimulateDataBase {
 	static boolean isSimulatedRandom = true;
 
 	public static void setAllStudentsData() {
-		GlobalConstants.total_KCs = 30;
-		GlobalConstants.total_Questions = 50;
-		GlobalConstants.total_Students = 100;
+		GlobalConstants.total_KCs = 3;
+		GlobalConstants.total_Questions = 5;
+		GlobalConstants.total_Students = 10;
 		GlobalConstants.total_Formats = 6;
 		GlobalConstants.total_Threshold = 25;
 		GlobalConstants.total_attempts_per_student = (2 * GlobalConstants.total_Questions);

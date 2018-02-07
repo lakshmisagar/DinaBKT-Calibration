@@ -2,6 +2,7 @@ package com.asu.calibration.DianBKT;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +40,8 @@ public class Calibration {
 	static double BestAUC = 0.0;
 	static double AUC = 0.0;
 
+	private static String AUXExcelFilePath = "C:/Users/lkusnoor/Downloads/LOGS/MAINAUXExcelFile.xls";
+	private static FileOutputStream fileOut;
 	private static HSSFWorkbook workbook;
 	private static HSSFSheet worksheet;
 	private static int rowIndex = 0;
@@ -438,6 +441,9 @@ public class Calibration {
 		SimulateDataBase.setAllStudentsData();
 		PrintStream o = new PrintStream(new File("C:/Users/lkusnoor/Downloads/LOGS/CALIB3.txt"));
 		System.setOut(o);
+		fileOut = new FileOutputStream(AUXExcelFilePath);
+		workbook = new HSSFWorkbook();
+		worksheet = workbook.createSheet("AUC");
 		while (climb < 100) {
 			System.out.println("CLIMB:" + climb);
 			findLocalMaximum();
