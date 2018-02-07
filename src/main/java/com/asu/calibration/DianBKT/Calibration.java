@@ -137,6 +137,7 @@ public class Calibration {
 			} else {
 				FP[T]++;
 			}
+			//System.out.println("Answer :"+ Answer+" TP["+T+"] "+TP[T]+"  FP["+T+"] "+FP[T]);
 		}
 		double PosteriorOfPreceding = 0.0;
 		for (int list_K = 0; list_K < message_KCs.size(); list_K++) {
@@ -225,12 +226,17 @@ public class Calibration {
 		double RightFalsePosRate = 1.0;
 		AUC = 0.0;
 		for (int T = 0; T < GlobalConstants.total_Threshold; T++) {
+			//System.out.println(" TP["+T+"] "+TP[T]+"  FP["+T+"] "+FP[T]);
+			//System.out.println("CorrectAnswers :"+CorrectAnswers+ " InCorrectAnswers:"+InCorrectAnswers);
 			double LeftTruePosRate = (double) (TP[T] / CorrectAnswers);
 			double LeftFalsePosRate = (double) (FP[T] / InCorrectAnswers);
+			//System.out.println("LeftTruePosRate :"+LeftTruePosRate+ " LeftFalsePosRate:"+LeftFalsePosRate);
 			double Height = Operations.divideDouble(Operations.addDouble(LeftTruePosRate, RightTruePosRate),
 					(double) 2);
-			double Width = Operations.substractDouble(RightTruePosRate, LeftTruePosRate);
+			double Width = Operations.substractDouble(RightFalsePosRate, LeftFalsePosRate);
+			//System.out.println("Height :"+Height+ " Width:"+Width);
 			AUC = Operations.addDouble(AUC, Operations.multiplyDouble(Height, Width));
+			//System.out.println("AUC "+AUC);
 			RightTruePosRate = LeftTruePosRate;
 			RightFalsePosRate = LeftFalsePosRate;
 		}
